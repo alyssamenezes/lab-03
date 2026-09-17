@@ -14,6 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,13 +25,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val cityRepository = CityRepository()
         setContent {
+        val cityRepository = remember { CityRepository() }
             ListyCity3Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     CityListScreen(
                         cities = cityRepository.cities,
-                        modifier = Modifier.padding(innerPadding)
+                        onAddCity = { city -> cityRepository.addCity(city) },
+                        onUpdateCity = { oldCity, updatedCity ->
+                            cityRepository.updateCity(oldCity, updatedCity)
+                        },
+                    modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
